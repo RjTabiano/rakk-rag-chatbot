@@ -10,7 +10,6 @@ pc = Pinecone(api_key=PINECONE_API_KEY)
 CLOUD = "aws"
 REGION = "us-east-1"
 
-# Create index if it doesn't exist
 if INDEX_NAME not in pc.list_indexes().names():
     pc.create_index(
         name=INDEX_NAME,

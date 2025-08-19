@@ -7,3 +7,4 @@ pinecone-client
 pypdf
 python-dotenv
 langchain-community
+mysql-connector-python

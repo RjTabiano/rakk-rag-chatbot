@@ -8,7 +8,7 @@ router = APIRouter()
 
 @router.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):
-    answer, docs = query_rag(request.question, namespace=request.namespace, k=request.k)
+    answer, docs, products = query_rag(request.question, namespace=request.namespace, k=request.k)
     sources = [
         {
             "title": d.metadata.get("title"),
@@ -17,7 +17,11 @@ def chat(request: ChatRequest):
         }
         for d in docs
     ]
-    return ChatResponse(answer=answer, sources=sources)
+    return ChatResponse(
+        answer=answer, 
+        sources=sources, 
+        products=products if products else None
+    )
 
 
 @router.get("/health")
