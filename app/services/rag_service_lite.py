@@ -6,7 +6,7 @@ from typing import Tuple, List, Optional, Dict, Any
 from app.services.llm_lite import llm
 from app.services.embeddings_lite import embeddings
 from app.services.pinecone_service_lite import get_vectorstore
-from app.services.product_service import search_products
+from app.services.product_service_lite import search_products
 from app.core.config import VECTOR_DIMENSION
 
 def should_retrieve(question: str) -> bool:

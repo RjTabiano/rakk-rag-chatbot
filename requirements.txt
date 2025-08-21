@@ -1,25 +1,10 @@
-# Optimized requirements for Vercel deployment (<250MB)
-# Core FastAPI - lightweight web framework
-fastapi==0.104.1
-uvicorn==0.24.0
-
-# LangChain core only - avoid heavy extras
-langchain-core==0.2.38
-langchain-google-genai==1.0.10
-langchain-community==0.2.17
-
-# Vector database - minimal pinecone
-pinecone-client==3.2.2
-
-# PDF processing - lightweight
-pypdf==3.17.4
-
-# Environment and config
-python-dotenv==1.0.1
-pydantic==2.7.4
-
-# Database - minimal MySQL connector
-mysql-connector-python==8.4.0
-
-# Essential typing for Python 3.11+
-typing-extensions==4.12.2
+# Ultra-minimal requirements for Vercel deployment (<250MB)
+fastapi>=0.100.0,<0.105.0
+uvicorn>=0.20.0,<0.25.0
+pinecone-client>=3.0.0,<4.0.0
+pypdf>=3.0.0,<4.0.0
+python-dotenv>=1.0.0,<2.0.0
+pydantic>=2.0.0,<3.0.0
+mysql-connector-python>=8.0.0,<9.0.0
+requests>=2.25.0,<3.0.0
+typing-extensions>=4.0.0
