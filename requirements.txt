@@ -1,12 +1,16 @@
-# Core FastAPI dependencies
+# Azure Functions and FastAPI core
+azure-functions>=1.18.0,<2.0.0
 fastapi>=0.104.0,<1.0.0
 uvicorn[standard]>=0.24.0,<1.0.0
-gunicorn>=21.2.0,<22.0.0
 
-# Azure Functions
-azure-functions>=1.18.0,<2.0.0
+# Environment management
+python-dotenv>=1.0.0,<2.0.0
 
-# LangChain ecosystem
+# Core dependencies for Python 3.11+
+pydantic>=2.0.0,<3.0.0
+typing-extensions>=4.8.0
+
+# LangChain ecosystem (minimal for testing)
 langchain>=0.1.0,<0.4.0
 langchain-google-genai>=1.0.0,<3.0.0
 langchain-community>=0.0.20,<0.4.0
@@ -18,12 +22,5 @@ langchain-pinecone>=0.1.0,<1.0.0
 # PDF processing
 pypdf>=3.0.0,<4.0.0
 
-# Env config
-python-dotenv>=1.0.0,<2.0.0
-
 # DB Connection
 mysql-connector-python>=8.0.33,<9.0.0
-
-# Core dependencies for Python 3.11+
-pydantic>=2.0.0,<3.0.0
-typing-extensions>=4.8.0

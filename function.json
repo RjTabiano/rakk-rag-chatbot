@@ -1,26 +1,16 @@
 {
-  "scriptFile": "function_app.py",
   "bindings": [
     {
       "authLevel": "anonymous",
       "type": "httpTrigger",
       "direction": "in",
-      "name": "req",
-      "methods": [
-        "get",
-        "post",
-        "put",
-        "delete",
-        "patch",
-        "head",
-        "options"
-      ],
-      "route": "{*route}"
+      "name": "req", 
+      "methods": [ "get", "post", "put", "delete", "patch", "head", "options" ]
     },
     {
       "type": "http",
       "direction": "out",
-      "name": "$return"
+      "name": "res"
     }
   ]
 }
