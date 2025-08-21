@@ -1,9 +1,27 @@
 # Azure Deployment Configuration for RakkA.I(RAG)
 
-## Important: App Service vs Azure Functions
+## Azure Deployment Process
 
-This application is configured for **Azure App Service** (web app), NOT Azure Functions. 
-If you created an Azure Functions app, you need to create an Azure App Service instead.
+### How Azure App Service Handles Dependencies
+
+Azure App Service automatically:
+1. **Detects `requirements.txt`** in your project root
+2. **Creates an isolated Python environment** for your app
+3. **Installs all dependencies** listed in requirements.txt
+4. **Sets up the correct Python paths** automatically
+
+**You do NOT need to:**
+- Create or activate virtual environments in deployment scripts
+- Manually install dependencies in startup scripts
+- Include virtual environment folders in your deployment package
+
+### GitHub Actions Deployment
+
+The workflow is optimized for Azure App Service:
+- No virtual environment creation during build
+- Dependencies are installed directly in the build environment
+- Virtual environment folders are excluded from deployment package
+- Azure handles the final dependency installation and environment setup
 
 ## Environment Variables Required for Azure
 # Set these in Azure App Service Configuration > Application Settings

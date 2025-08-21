@@ -7,12 +7,8 @@ echo "Starting RakkA.I(RAG) FastAPI application..."
 export PYTHONPATH="/home/site/wwwroot:$PYTHONPATH"
 export PORT=${PORT:-8000}
 
-# Install dependencies if requirements.txt exists and packages are not installed
-if [ -f "requirements.txt" ]; then
-    echo "Installing Python dependencies..."
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-fi
+# Azure App Service automatically installs dependencies from requirements.txt
+# No need to manually install packages in production
 
 # Start the FastAPI application using gunicorn for production
 echo "Starting FastAPI application with gunicorn..."
