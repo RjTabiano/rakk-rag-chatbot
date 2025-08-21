@@ -8,3 +8,5 @@ pypdf
 python-dotenv
 langchain-community
 mysql-connector-python
+streamlit
+requests
