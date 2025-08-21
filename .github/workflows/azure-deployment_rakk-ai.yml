@@ -32,11 +32,21 @@ jobs:
 
       # Optional: Add step to run tests here
 
+      - name: Create deployment package
+        run: |
+          # Remove unnecessary files and directories
+          rm -rf .git .github test-env data __pycache__ .gitignore README.md DEPLOYMENT_READY.md
+          find . -name "*.pyc" -delete
+          find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+          
+          # Create zip package
+          zip -r deployment-package.zip . -x "*.git*" "test-env/*" "data/*" "__pycache__/*" "*.pyc"
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          path: deployment-package.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -64,4 +74,4 @@ jobs:
         with:
           app-name: 'rakk-ai'
           slot-name: 'Production'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          package: deployment-package.zip
