@@ -31,18 +31,19 @@ jobs:
           pip install -r requirements.txt
 
       # Optional: Add step to run tests here
+      
+      - name: Resolve Project Dependencies Using Pip
+        shell: bash
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          python -m pip install --target=".python_packages/lib/site-packages" -r ./requirements.txt --no-cache-dir
+          popd
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: |
-            .
-            !venv/
-            !.git/
-            !test-env/
-            !__pycache__/
-            !.pytest_cache/
+          path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -71,5 +72,3 @@ jobs:
           app-name: 'rakk-ai'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
