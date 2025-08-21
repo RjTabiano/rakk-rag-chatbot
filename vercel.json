@@ -10,13 +10,5 @@
       "src": "/(.*)",
       "dest": "api/index_lite.py"
     }
-  ],
-  "env": {
-    "PYTHONPATH": "app"
-  },
-  "functions": {
-    "api/index_lite.py": {
-      "maxDuration": 30
-    }
-  }
+  ]
 }
