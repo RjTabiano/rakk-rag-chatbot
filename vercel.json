@@ -10,10 +10,5 @@
       "src": "/(.*)",
       "dest": "api/index_lite.py"
     }
-  ],
-  "functions": {
-    "api/index_lite.py": {
-      "runtime": "python3.12"
-    }
-  }
+  ]
 }
