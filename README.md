@@ -119,65 +119,62 @@ The application will be available at:
 - **Interactive API Documentation**: `http://127.0.0.1:8000/docs`
 - **Alternative API Documentation**: `http://127.0.0.1:8000/redoc`
 
-## Azure Deployment
+## Azure Functions Deployment
 
-This project is configured for deployment on Azure App Service with Python 3.12 runtime.
+This project is configured for deployment on Azure Functions with Python 3.12 runtime using the ASGI integration pattern.
 
-### Prerequisites for Azure Deployment
+### Prerequisites for Azure Functions Deployment
 1. Azure CLI installed and configured
-2. Azure subscription with appropriate permissions
-3. Resource group created for the application
+2. Azure Functions Core Tools installed
+3. Azure subscription with appropriate permissions
+4. Resource group created for the application
 
-### Azure App Service Deployment Steps
+### Azure Functions Deployment Steps
 
-1. **Create Azure App Service**:
+1. **Install Azure Functions Core Tools**:
+   ```bash
+   npm install -g azure-functions-core-tools@4 --unsafe-perm true
+   ```
+
+2. **Create Azure Function App**:
    ```bash
    # Create resource group (if not exists)
-   az group create --name myResourceGroup --location "East US"
+   az group create --name rakkrag-rg --location "East US"
    
-   # Create App Service plan
-   az appservice plan create --name myAppServicePlan --resource-group myResourceGroup --sku B1 --is-linux
+   # Create storage account (required for Functions)
+   az storage account create --name rakkragstg$(date +%s) --resource-group rakkrag-rg --location "East US" --sku Standard_LRS
    
-   # Create web app
-   az webapp create --resource-group myResourceGroup --plan myAppServicePlan --name myRagChatbot --runtime "PYTHON|3.12"
+   # Create Function App
+   az functionapp create --resource-group rakkrag-rg --consumption-plan-location "East US" --runtime python --runtime-version 3.12 --functions-version 4 --name rakk-ai --storage-account rakkragstg$(date +%s) --os-type Linux
    ```
 
-2. **Configure Environment Variables**:
+3. **Configure Environment Variables**:
    ```bash
-   az webapp config appsettings set --resource-group myResourceGroup --name myRagChatbot --settings \
-     GOOGLE_API_KEY="your-google-api-key" \
-     PINECONE_API_KEY="your-pinecone-api-key" \
-     PINECONE_INDEX_NAME="your-pinecone-index-name" \
-     RAG_NAMESPACE="your-rag-namespace" \
-     DB_HOST="your-db-host" \
-     DB_PORT="your-db-port" \
-     DB_DATABASE="your-database-name" \
-     DB_USERNAME="your-db-username" \
-     DB_PASSWORD="your-db-password"
+   az functionapp config appsettings set --name rakk-ai --resource-group rakkrag-rg --settings @azure-settings.json
    ```
 
-3. **Deploy the Application**:
+4. **Deploy the Application**:
    ```bash
-   # Deploy from local Git repository
-   az webapp deployment source config-local-git --name myRagChatbot --resource-group myResourceGroup
-   
-   # Add Azure remote and push
-   git remote add azure <deployment-url>
-   git push azure azure-deployment:master
+   # Deploy using GitHub Actions (recommended) or manual deployment
+   # For GitHub Actions: Push to azure-deployment branch
+   # For manual deployment:
+   func azure functionapp publish rakk-ai --python
    ```
 
 ### Alternative Deployment Methods
 
-#### Azure Container Instances
+#### Manual Deployment Scripts
 ```bash
-# Build and push to Azure Container Registry
-az acr create --resource-group myResourceGroup --name myRegistry --sku Basic
-az acr build --registry myRegistry --image ragchatbot .
-az container create --resource-group myResourceGroup --name ragchatbot-container --image myRegistry.azurecr.io/ragchatbot
+# Windows PowerShell:
+./deploy-azure-functions.ps1
+
+# Linux/Mac Bash:
+chmod +x deploy-azure-functions.sh
+./deploy-azure-functions.sh
 ```
 
-#### Azure Functions (Serverless)
-For serverless deployment, the application can be adapted to run on Azure Functions with the Python runtime.
+#### GitHub Actions (Automated)
+The repository includes a GitHub Actions workflow that automatically deploys to Azure Functions when you push to the `azure-deployment` branch.
 
 ## Contributing
 Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
