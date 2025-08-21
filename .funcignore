@@ -1,2 +1,42 @@
 
-venv
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.venv/
+venv/
+ENV/
+env/
+test-env/
+
+# Testing
+.pytest_cache/
+.coverage
+.nyc_output
+.tox/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Azure Functions artifacts
+.azure/
+local.settings.json
+
+# Data files (if they're not needed in production)
+data/
+
+# Development files
+README.md
+*.md
+.github/

@@ -10,8 +10,8 @@ def read_root():
 def read_health():
     return {"status": "OK", "message": "Service is running"}
 
-@app.get("/first", status_code=200, response_description="Health Check")
-def read_health():
+@app.get("/first", status_code=200, response_description="First Service Check")
+def read_first():
     return {"status": "OK", "message": "Service1 is running"}
 
 

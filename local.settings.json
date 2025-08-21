@@ -4,6 +4,7 @@
     "FUNCTIONS_WORKER_RUNTIME": "python",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_EXTENSION_VERSION": "~4",
-    "PYTHON_ISOLATE_WORKER_DEPENDENCIES": "1"
+    "PYTHON_ISOLATE_WORKER_DEPENDENCIES": "1",
+    "AzureWebJobsFeatureFlags": "EnableWorkerIndexing"
   }
 }

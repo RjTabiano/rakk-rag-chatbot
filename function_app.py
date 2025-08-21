@@ -3,8 +3,4 @@ import logging
 from main import app as fastapi_app
 
 # Create the Azure Functions app
-app = func.AsgiFunctionApp(
-    app=fastapi_app,
-    function_name="rakk-rag-chatbot",
-    http_auth_level=func.AuthLevel.ANONYMOUS
-)
+app = func.AsgiFunctionApp(app=fastapi_app, http_auth_level=func.AuthLevel.ANONYMOUS)
