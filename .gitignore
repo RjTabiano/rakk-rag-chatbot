@@ -25,10 +25,20 @@ venv/
 env/
 .venv/
 .env/
+test-env/
+venv-lite/
+
+# Azure specific
+.azure/
+*.zip
+.deployment
+deploy.cmd
+
+# Docker
+.dockerignore
 
 # Jupyter Notebooks
 .ipynb_checkpoints/
-
 
 # Test & coverage
 htmlcov/

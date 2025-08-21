@@ -35,13 +35,10 @@ RakkA.I(RAG)
 │       ├── formatter.py
 │       ├── pdf_loader.py
 │       └── rag_utils.py
-├── api/
-│   └── index.py              # Vercel deployment entry point
 ├── data/
 ├── .env
 ├── .python-version           # Python version specification
 ├── requirements.txt
-├── vercel.json              # Vercel deployment configuration
 └── README.md
 ```
 
@@ -79,19 +76,6 @@ To get started with the RakkA.I(RAG) project, follow these steps:
 5. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
-   ```
-
-### Vercel Deployment
-This project is configured for deployment on Vercel with Python 3.12 runtime.
-
-1. Install Vercel CLI:
-   ```bash
-   npm install -g vercel
-   ```
-
-2. Deploy to Vercel:
-   ```bash
-   vercel
    ```
 
 ## Environment Variables
@@ -135,20 +119,65 @@ The application will be available at:
 - **Interactive API Documentation**: `http://127.0.0.1:8000/docs`
 - **Alternative API Documentation**: `http://127.0.0.1:8000/redoc`
 
-### Production Deployment
-For Vercel deployment, the application uses the `api/index.py` entry point with Python 3.12 runtime.
+## Azure Deployment
 
-### Quick Start Script
-Use the deployment script for automated setup and testing:
+This project is configured for deployment on Azure App Service with Python 3.12 runtime.
+
+### Prerequisites for Azure Deployment
+1. Azure CLI installed and configured
+2. Azure subscription with appropriate permissions
+3. Resource group created for the application
+
+### Azure App Service Deployment Steps
+
+1. **Create Azure App Service**:
+   ```bash
+   # Create resource group (if not exists)
+   az group create --name myResourceGroup --location "East US"
+   
+   # Create App Service plan
+   az appservice plan create --name myAppServicePlan --resource-group myResourceGroup --sku B1 --is-linux
+   
+   # Create web app
+   az webapp create --resource-group myResourceGroup --plan myAppServicePlan --name myRagChatbot --runtime "PYTHON|3.12"
+   ```
+
+2. **Configure Environment Variables**:
+   ```bash
+   az webapp config appsettings set --resource-group myResourceGroup --name myRagChatbot --settings \
+     GOOGLE_API_KEY="your-google-api-key" \
+     PINECONE_API_KEY="your-pinecone-api-key" \
+     PINECONE_INDEX_NAME="your-pinecone-index-name" \
+     RAG_NAMESPACE="your-rag-namespace" \
+     DB_HOST="your-db-host" \
+     DB_PORT="your-db-port" \
+     DB_DATABASE="your-database-name" \
+     DB_USERNAME="your-db-username" \
+     DB_PASSWORD="your-db-password"
+   ```
+
+3. **Deploy the Application**:
+   ```bash
+   # Deploy from local Git repository
+   az webapp deployment source config-local-git --name myRagChatbot --resource-group myResourceGroup
+   
+   # Add Azure remote and push
+   git remote add azure <deployment-url>
+   git push azure azure-deployment:master
+   ```
+
+### Alternative Deployment Methods
+
+#### Azure Container Instances
 ```bash
-python deploy.py
+# Build and push to Azure Container Registry
+az acr create --resource-group myResourceGroup --name myRegistry --sku Basic
+az acr build --registry myRegistry --image ragchatbot .
+az container create --resource-group myResourceGroup --name ragchatbot-container --image myRegistry.azurecr.io/ragchatbot
 ```
 
-This script will:
-1. Check Python 3.12 compatibility
-2. Install dependencies
-3. Run health checks
-4. Offer options to start local server or deploy to Vercel
+#### Azure Functions (Serverless)
+For serverless deployment, the application can be adapted to run on Azure Functions with the Python runtime.
 
 ## Contributing
 Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
