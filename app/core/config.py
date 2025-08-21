@@ -8,6 +8,7 @@ load_dotenv()
 # API Keys and External Service Configuration
 GOOGLE_API_KEY: Optional[str] = os.getenv("GOOGLE_API_KEY")
 PINECONE_API_KEY: Optional[str] = os.getenv("PINECONE_API_KEY")
+PINECONE_ENVIRONMENT: str = os.getenv("PINECONE_ENVIRONMENT", "gcp-starter")
 
 # Pinecone Configuration
 INDEX_NAME: str = os.getenv("PINECONE_INDEX_NAME", "ecom-rag")

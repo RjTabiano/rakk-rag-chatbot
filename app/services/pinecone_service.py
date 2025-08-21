@@ -1,29 +1,63 @@
 import os
+import pinecone
 from typing import Optional
-from pinecone import Pinecone, ServerlessSpec
-from app.core.config import INDEX_NAME, VECTOR_DIMENSION, PINECONE_API_KEY
+from app.core.config import INDEX_NAME, VECTOR_DIMENSION, PINECONE_API_KEY, PINECONE_ENVIRONMENT
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
+import logging
 
-# Initialize Pinecone with the new API
-pc = Pinecone(api_key=PINECONE_API_KEY)
+# Setup logging
+logger = logging.getLogger(__name__)
 
-# Create index if it doesn't exist
-if INDEX_NAME not in pc.list_indexes().names():
-    pc.create_index(
-        name=INDEX_NAME,
-        dimension=VECTOR_DIMENSION,
-        metric="cosine",
-        spec=ServerlessSpec(
-            cloud="aws",
-            region="us-east-1"
-        )
-    )
+# Global variables for lazy initialization
+_pinecone_initialized = False
+_embeddings = None
 
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+def init_pinecone():
+    """Initialize Pinecone connection lazily."""
+    global _pinecone_initialized, _embeddings
+    
+    if _pinecone_initialized:
+        return
+    
+    try:
+        # Initialize Pinecone with the v2 API
+        pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
+        
+        # Create index if it doesn't exist
+        if INDEX_NAME not in pinecone.list_indexes():
+            pinecone.create_index(
+                name=INDEX_NAME,
+                dimension=VECTOR_DIMENSION,
+                metric="cosine"
+            )
+        
+        _embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+        _pinecone_initialized = True
+        logger.info("Pinecone initialized successfully")
+        
+    except Exception as e:
+        logger.error(f"Failed to initialize Pinecone: {str(e)}")
+        # Don't raise exception to prevent app startup failure
+        pass
+
+# Lazy initialization - don't initialize during import
 
 def get_index():
     """Get the Pinecone index."""
-    return pc.Index(INDEX_NAME)
+    init_pinecone()
+    if not _pinecone_initialized:
+        raise RuntimeError("Pinecone not properly initialized")
+    return pinecone.Index(INDEX_NAME)
+
+def get_embeddings():
+    """Get the embeddings instance."""
+    init_pinecone()
+    if not _embeddings:
+        raise RuntimeError("Embeddings not properly initialized")
+    return _embeddings
+
+# For backward compatibility
+embeddings = property(get_embeddings)
 
 def get_vectorstore(namespace: Optional[str] = None):
     """
@@ -31,6 +65,7 @@ def get_vectorstore(namespace: Optional[str] = None):
     This is a custom implementation that works with the new Pinecone API.
     """
     index = get_index()
+    embeddings_instance = get_embeddings()
     
     class PineconeVectorStore:
         def __init__(self, index, embeddings, namespace=None):
@@ -82,4 +117,4 @@ def get_vectorstore(namespace: Optional[str] = None):
             
             return documents
     
-    return PineconeVectorStore(index, embeddings, namespace)
+    return PineconeVectorStore(index, embeddings_instance, namespace)

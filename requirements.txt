@@ -12,11 +12,12 @@ typing-extensions>=4.8.0
 
 # LangChain ecosystem (minimal for testing)
 langchain>=0.1.0,<0.4.0
+langchain-core>=0.1.0,<0.4.0
 langchain-google-genai>=1.0.0,<3.0.0
 langchain-community>=0.0.20,<0.4.0
 
 # Vector database and embeddings
-pinecone-client>=3.0.0,<4.0.0
+pinecone-client>=2.2.4,<3.0.0
 langchain-pinecone>=0.1.0,<1.0.0
 
 # PDF processing
