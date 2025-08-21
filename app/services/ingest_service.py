@@ -1,10 +1,11 @@
+from typing import List, Optional
 from app.utils.pdf_loader import load_pdf
 from app.utils.chunking import split_docs
 from app.services.pinecone_service import get_vectorstore
 from langchain_core.documents import Document
 
-def ingest_pdf(pdf_path: str, namespace: str = None, chunk_size: int = 1000, chunk_overlap: int = 150) -> dict:
-    docs: list[Document] = load_pdf(pdf_path)
+def ingest_pdf(pdf_path: str, namespace: Optional[str] = None, chunk_size: int = 1000, chunk_overlap: int = 150) -> dict:
+    docs: List[Document] = load_pdf(pdf_path)
     chunks = split_docs(docs, chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     for i, chunk in enumerate(chunks):
         meta = chunk.metadata or {}
