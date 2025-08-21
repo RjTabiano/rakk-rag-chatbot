@@ -1,9 +1,10 @@
+from typing import Optional, List, Dict, Any
 from app.utils.db_connection import get_db_connection
 from langchain.tools import StructuredTool
 
 BASE_PRODUCT_URL = "http://127.0.0.1:8080"
 
-def search_products(keyword: str = None, limit: int = None):
+def search_products(keyword: Optional[str] = None, limit: Optional[int] = None) -> List[Dict[str, Any]]:
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     print("Selecting all products from database")

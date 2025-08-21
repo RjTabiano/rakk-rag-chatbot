@@ -1,17 +1,44 @@
 import os
+from typing import Optional
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 load_dotenv()
 
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
-INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "ecom-rag")
-RAG_NAMESPACE = os.getenv("RAG_NAMESPACE", "prod-v1")
-VECTOR_DIMENSION = 768
+# API Keys and External Service Configuration
+GOOGLE_API_KEY: Optional[str] = os.getenv("GOOGLE_API_KEY")
+PINECONE_API_KEY: Optional[str] = os.getenv("PINECONE_API_KEY")
 
-DB_HOST=os.getenv("DB_HOST")
-DB_PORT=os.getenv("DB_PORT")
-DB_DATABASE=os.getenv("DB_DATABASE")
-DB_USERNAME=os.getenv("DB_USERNAME")
-DB_PASSWORD=os.getenv("DB_PASSWORD")
+# Pinecone Configuration
+INDEX_NAME: str = os.getenv("PINECONE_INDEX_NAME", "ecom-rag")
+RAG_NAMESPACE: str = os.getenv("RAG_NAMESPACE", "prod-v1")
+VECTOR_DIMENSION: int = 768
+
+# Database Configuration
+DB_HOST: Optional[str] = os.getenv("DB_HOST")
+DB_PORT: Optional[str] = os.getenv("DB_PORT")
+DB_DATABASE: Optional[str] = os.getenv("DB_DATABASE")
+DB_USERNAME: Optional[str] = os.getenv("DB_USERNAME")
+DB_PASSWORD: Optional[str] = os.getenv("DB_PASSWORD")
+
+# Validation function for required environment variables
+def validate_config() -> None:
+    """Validate that all required configuration variables are set."""
+    required_vars = {
+        "GOOGLE_API_KEY": GOOGLE_API_KEY,
+        "PINECONE_API_KEY": PINECONE_API_KEY,
+        "DB_HOST": DB_HOST,
+        "DB_PORT": DB_PORT,
+        "DB_DATABASE": DB_DATABASE,
+        "DB_USERNAME": DB_USERNAME,
+        "DB_PASSWORD": DB_PASSWORD,
+    }
+    
+    missing_vars = [var for var, value in required_vars.items() if not value]
+    
+    if missing_vars:
+        raise EnvironmentError(
+            f"Missing required environment variables: {', '.join(missing_vars)}. "
+            "Please check your .env file or environment configuration."
+        )
 
