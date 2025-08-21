@@ -1,17 +1,25 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.api import chat, ingest  
 
-app = FastAPI()
+app = FastAPI(title="E-commerce RAG Chatbot")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"],  
+)
+
+app.include_router(ingest.router, tags=["Ingest"])
+app.include_router(chat.router, tags=["Chat"])
 
 @app.get("/")
-def read_root():
-    return {"message": "Hello, Welcome to Python FastAPI World!"}
-
-@app.get("/health", status_code=200, response_description="Health Check")
-def read_health():
-    return {"status": "OK", "message": "Service is running"}
-
-@app.get("/first", status_code=200, response_description="First Service Check")
-def read_first():
-    return {"status": "OK", "message": "Service1 is running"}
+def root():
+    return {"message": "Welcome to the E-commerce RAG Chatbot API"}
 
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
