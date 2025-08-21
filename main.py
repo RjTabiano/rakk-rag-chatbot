@@ -20,6 +20,3 @@ def root():
     return {"message": "Welcome to the E-commerce RAG Chatbot API"}
 
 
-@app.get("/health")
-def health():
-    return {"status": "ok"}
