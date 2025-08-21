@@ -11,7 +11,6 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   PYTHON_VERSION: '3.12' # set this to the python version to use (supports 3.8, 3.9, 3.10, 3.11, 3.12)
 
 jobs:
@@ -83,10 +82,10 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: 'rakk-ai'
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: './release.zip'
 
       - name: 'Configure startup command'
         run: |
-          az webapp config set --name rakk-ai --resource-group rakkrag-rg --startup-file "startup.py"
+          az webapp config set --name rakk-ai --resource-group rakkrag-rg --startup-file "gunicorn -k uvicorn.workers.UvicornWorker app.main:app --bind=0.0.0.0:8000"
         continue-on-error: true
           

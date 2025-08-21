@@ -55,7 +55,7 @@ az appservice plan create --name rakkrag-plan --resource-group rakkrag-rg --sku 
 az webapp create --resource-group rakkrag-rg --plan rakkrag-plan --name rakk-ai --runtime "PYTHON|3.12"
 
 # 4. Configure startup command
-az webapp config set --resource-group rakkrag-rg --name rakk-ai --startup-file "startup.py"
+az webapp config set --resource-group rakkrag-rg --name rakk-ai --startup-file "gunicorn -k uvicorn.workers.UvicornWorker app.main:app --bind=0.0.0.0:8000"
 
 # 5. Configure App Settings
 az webapp config appsettings set --resource-group rakkrag-rg --name rakk-ai --settings @azure-settings.json
@@ -105,8 +105,13 @@ Check the application logs:
 az webapp log tail --resource-group rakkrag-rg --name rakk-ai
 ```
 
-### 3. Import Path Issues
-The application automatically configures Python paths for Azure. If you see import errors:
-- Ensure `startup.py` is in the root directory
-- Check that `app/` directory structure is maintained
-- Verify environment variable `PYTHONPATH` is set to `.` or `/home/site/wwwroot`
+Common startup command issues:
+- **Wrong startup command**: Ensure you're using `gunicorn -k uvicorn.workers.UvicornWorker app.main:app --bind=0.0.0.0:8000`
+- **Import path errors**: Verify `app.main:app` matches your file structure (`app/main.py` with `app = FastAPI()`)
+- **Missing gunicorn**: Ensure `gunicorn` is in `requirements.txt`
+
+### 5. Package Path Issues
+If deployment fails with "package not found":
+- Ensure the ZIP file (`release.zip`) is created properly
+- Check that the deployment action points to `./release.zip`, not repo root
+- Verify the ZIP contains all necessary files excluding virtual environments

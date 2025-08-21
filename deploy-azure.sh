@@ -61,7 +61,7 @@ echo "⚙️ Configuring startup command..."
 az webapp config set \
     --name $APP_NAME \
     --resource-group $RESOURCE_GROUP \
-    --startup-file "startup.py" \
+    --startup-file "gunicorn -k uvicorn.workers.UvicornWorker app.main:app --bind=0.0.0.0:8000" \
     --output table
 
 # Deploy code using ZIP deployment
