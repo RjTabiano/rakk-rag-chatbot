@@ -85,7 +85,8 @@ fi
 
 # Deploy using Azure Functions Core Tools
 echo "🚀 Deploying to Azure Functions..."
-func azure functionapp publish $FUNCTION_APP_NAME --python
+echo "Using simplified deployment approach..."
+func azure functionapp publish $FUNCTION_APP_NAME --python --no-build
 
 echo "✅ Deployment completed!"
 echo "🌐 Your Function App should be available at: https://${FUNCTION_APP_NAME}.azurewebsites.net"

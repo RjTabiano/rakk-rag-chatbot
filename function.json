@@ -9,12 +9,13 @@
       "methods": [
         "get",
         "post",
-        "delete",
-        "head",
-        "patch",
         "put",
+        "delete",
+        "patch",
+        "head",
         "options"
-      ]
+      ],
+      "route": "{*route}"
     },
     {
       "type": "http",

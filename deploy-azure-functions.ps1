@@ -87,7 +87,8 @@ if (Test-Path "azure-settings.json") {
 
 # Deploy using Azure Functions Core Tools
 Write-Host "🚀 Deploying to Azure Functions..." -ForegroundColor Yellow
-func azure functionapp publish $FUNCTION_APP_NAME --python
+Write-Host "Using simplified deployment approach..." -ForegroundColor Yellow
+func azure functionapp publish $FUNCTION_APP_NAME --python --no-build
 
 Write-Host "✅ Deployment completed!" -ForegroundColor Green
 Write-Host "🌐 Your Function App should be available at: https://$FUNCTION_APP_NAME.azurewebsites.net" -ForegroundColor Cyan
