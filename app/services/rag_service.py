@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.agents import initialize_agent, AgentType, AgentExecutor
 from langchain_core.documents import Document
@@ -12,7 +12,7 @@ from app.utils.rag_utils import should_retrieve, build_context
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.2)
 
 
-def query_rag(question: str, namespace: str | None = None, k: int = 5) -> Tuple[str, List[Document], List[dict] | None]:
+def query_rag(question: str, namespace: Optional[str] = None, k: int = 5) -> Tuple[str, List[Document], Optional[List[dict]]]:
     # Retrieval phase
     if should_retrieve(question):
         qvec = embeddings.embed_query(question)

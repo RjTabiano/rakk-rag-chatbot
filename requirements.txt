@@ -1,10 +1,25 @@
-fastapi
-uvicorn
-langchain
-langchain-google-genai
-langchain-pinecone
-pinecone-client
-pypdf
-python-dotenv
-langchain-community
-mysql-connector-python
+# Core FastAPI dependencies
+fastapi>=0.104.0,<1.0.0
+uvicorn[standard]>=0.24.0,<1.0.0
+
+# LangChain ecosystem
+langchain>=0.1.0,<0.4.0
+langchain-google-genai>=1.0.0,<3.0.0
+langchain-community>=0.0.20,<0.4.0
+
+# Vector database and embeddings
+pinecone-client>=3.0.0,<4.0.0
+langchain-pinecone>=0.1.0,<1.0.0
+
+# PDF processing
+pypdf>=3.0.0,<4.0.0
+
+# Env config
+python-dotenv>=1.0.0,<2.0.0
+
+# DB Connection
+mysql-connector-python>=8.0.33,<9.0.0
+
+# Core dependencies for Python 3.11+
+pydantic>=2.0.0,<3.0.0
+typing-extensions>=4.8.0
