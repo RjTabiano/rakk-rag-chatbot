@@ -76,7 +76,30 @@ git push azure azure-deployment:master
 If you see "sync trigger" errors, you likely created an Azure Functions app instead of an App Service.
 **Solution**: Delete the Function App and create an App Service instead using the commands above.
 
-### 2. Startup Issues
+### 2. 409 Conflict Error During Deployment
+This error occurs when there's a deployment conflict or the app is busy.
+
+**Solutions**:
+- **Wait and retry**: Sometimes Azure is processing a previous deployment
+- **Use manual deployment**: Run `./deploy-azure.ps1` (Windows) or `./deploy-azure.sh` (Linux/Mac)
+- **Stop the app first**: `az webapp stop --name rakk-ai --resource-group rakkrag-rg`
+- **Delete deployment history**: In Azure Portal → App Service → Deployment Center → Clear deployment history
+
+### 3. Manual Deployment Options
+If GitHub Actions fails, use the provided scripts:
+
+**Windows PowerShell**:
+```powershell
+./deploy-azure.ps1
+```
+
+**Linux/Mac Bash**:
+```bash
+chmod +x deploy-azure.sh
+./deploy-azure.sh
+```
+
+### 4. Startup Issues
 Check the application logs:
 ```bash
 az webapp log tail --resource-group rakkrag-rg --name rakk-ai
