@@ -20,15 +20,29 @@ data/
 logs/
 *.log
 
-# Virtual environments
+# Virtual environments (exclude from all deployments)
 venv/
 env/
 .venv/
 .env/
+test-env/
+venv-lite/
+**/venv/
+**/env/
+**/.venv/
+te
+# Azure specific
+.azure/
+*.zip
+.deployment
+deploy.cmd
+local.settings.json
+
+# Docker
+.dockerignore
 
 # Jupyter Notebooks
 .ipynb_checkpoints/
-
 
 # Test & coverage
 htmlcov/
