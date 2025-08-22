@@ -3,7 +3,7 @@ from app.utils.db_connection import get_db_connection
 from langchain.tools import StructuredTool
 from app.core.config import APP_URL
 
-BASE_PRODUCT_URL = f"{APP_URL}/product_info"
+BASE_PRODUCT_URL = f"/product_info"
 
 def search_products(keyword: Optional[str] = None, limit: Optional[int] = None) -> List[Dict[str, Any]]:
     conn = get_db_connection()
@@ -42,9 +42,11 @@ def search_products(keyword: Optional[str] = None, limit: Optional[int] = None) 
     cursor.close()
     conn.close()
 
-    # Attach product links for frontend rendering
+    # Attach product links for frontend rendering and map image_path to image
     for product in results:
         product["link"] = f"{BASE_PRODUCT_URL}/{product['id']}"
+        if 'image_path' in product:
+            product["image"] = product.pop('image_path')
 
     print(f"Found {len(results)} products")
     return results
