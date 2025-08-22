@@ -6,6 +6,8 @@ class ProductItem(BaseModel):
     name: str
     price: float
     description: Optional[str] = None
+    category: Optional[str] = None
+    stock_quantity: Optional[int] = None
     image: Optional[str] = None
     link: Optional[str] = None
 
