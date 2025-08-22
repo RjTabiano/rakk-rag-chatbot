@@ -2,6 +2,8 @@ from fastapi import APIRouter
 from app.models.chat import ChatRequest, ChatResponse
 from app.services.rag_service import query_rag, clear_chat_session, get_chat_history
 from app.utils.formatter import format_docs_for_llm
+from app.utils.db_connection import get_db_connection
+from app.core.config import DB_DATABASE
 
 router = APIRouter()
 
@@ -35,6 +37,45 @@ def health():
     Health check endpoint for API testing.
     """
     return {"status": "ok"}
+
+
+@router.get("/db-status")
+def check_database_connection():
+    """
+    Check database connection status and display database name.
+    """
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Test connection with a simple query
+        cursor.execute("SELECT DATABASE() as db_name, CONNECTION_ID() as connection_id, NOW() as current_time")
+        result = cursor.fetchone()
+        
+        # Get additional database info
+        cursor.execute("SELECT VERSION() as mysql_version")
+        version_result = cursor.fetchone()
+        
+        cursor.close()
+        conn.close()
+        
+        return {
+            "status": "connected",
+            "database_name": DB_DATABASE,
+            "active_database": result[0],
+            "connection_id": result[1],
+            "current_time": result[2].isoformat() if result[2] else None,
+            "mysql_version": version_result[0] if version_result else None,
+            "message": f"Successfully connected to database: {DB_DATABASE}"
+        }
+        
+    except Exception as e:
+        return {
+            "status": "error",
+            "database_name": DB_DATABASE,
+            "error": str(e),
+            "message": f"Failed to connect to database: {DB_DATABASE}"
+        }
 
 
 @router.delete("/chat/session/{session_id}")
