@@ -21,6 +21,9 @@ DB_DATABASE: Optional[str] = os.getenv("DB_DATABASE")
 DB_USERNAME: Optional[str] = os.getenv("DB_USERNAME")
 DB_PASSWORD: Optional[str] = os.getenv("DB_PASSWORD")
 
+# Application Configuration
+APP_URL: Optional[str] = os.getenv("APP_URL")
+
 # Validation function for required environment variables
 def validate_config() -> None:
     """Validate that all required configuration variables are set."""
