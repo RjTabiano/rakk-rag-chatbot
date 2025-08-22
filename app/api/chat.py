@@ -49,7 +49,7 @@ def check_database_connection():
         cursor = conn.cursor()
         
         # Test connection with a simple query
-        cursor.execute("SELECT DATABASE() as db_name, CONNECTION_ID() as connection_id, NOW() as current_time")
+        cursor.execute("SELECT DATABASE() as db_name, CONNECTION_ID() as connection_id, NOW() as timestamp_now")
         result = cursor.fetchone()
         
         # Get additional database info
